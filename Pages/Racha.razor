@@ -1,0 +1,74 @@
+﻿@page "/racha"
+
+<PageTitle>Racha</PageTitle>
+
+<h1>Quanto fica pra cada?</h1>
+
+<legend>O que devo saber:</legend>
+<label for="billAmount">Valor total da conta:
+    <br>
+    <input type="number"
+        autofocus=autofocus
+        @bind-value=@TotConta />
+</label>
+<br>
+
+<label>Quantos somos:
+    <br>
+    <input type="number"
+        @bind-value=@TotConvivas />
+</label>
+<br>
+
+<label>
+    <input type="checkbox" @bind-value=@TemGorjeta />
+    &nbsp;Adiciona gorjeta
+</label>
+<br>
+
+<label>
+    <input type="radio" name="tipType" value="1"
+        checked="@(TipoGorjeta == 1)"
+        @onclick="@(() => TipoGorjeta = 1)" />
+    percentual
+</label>
+<label for="optTipAmount">
+    <input type="radio" name="tipType" value="2"
+        checked="@(TipoGorjeta == 2)"
+        @onclick="@(() => TipoGorjeta = 2)" />
+    valor
+</label><br>
+
+<input type="number" @bind-value=@BaseGorjeta /><br>
+
+<br><br>
+
+<button class="btn btn-primary" @onclick="Calcular">Calcular</button>
+
+<br><br>
+
+<legend>Resultado:</legend>
+
+<label>Valor da gorjeta: @Gorjeta</label><br>
+
+<label>Cada un paga: @ValorPorPessoa.ToString("c")</label>
+
+@code {
+    private double TotConta = 0;
+    private int TotConvivas = 0;
+    private bool TemGorjeta = false;
+    private int TipoGorjeta = 0;
+    private double BaseGorjeta = 0;
+    private double Gorjeta = 0;
+    private double ValorPorPessoa = 0;
+
+    private void Calcular()
+    {
+        if (TemGorjeta)
+        {
+            Gorjeta = TipoGorjeta == 1 ? TotConta * (BaseGorjeta / 100) : BaseGorjeta;
+        }
+
+        ValorPorPessoa = (TotConta + Gorjeta) / TotConvivas;
+    }
+}
